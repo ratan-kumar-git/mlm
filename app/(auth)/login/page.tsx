@@ -24,7 +24,7 @@ const Loginpage = () => {
   return (
     <div className="w-full bg-black h-screen relative overflow-hidden flex items-center justify-center">
       <div className="absolute inset-0 z-0 pointer-events-none bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.08)_0%,rgba(255,140,250,0.08)_20%,rgba(0,0,0,0)_60%)]"></div>
-      <div className="max-w-xs sm:max-w-md w-full bg-card p-4 rounded-md flex items-center flex-col justify-center space-y-8 mx-auto shadow-[5px_5px_rgba(0,98,90,0.4),10px_10px_rgba(0,98,90,0.3),15px_15px_rgba(0,98,90,0.2),20px_20px_rgba(0,98,90,0.1),25px_25px_rgba(0,98,90,0.05)]">
+      <div className="max-w-[95vw] sm:max-w-md w-full bg-card p-4 rounded-md flex items-center flex-col justify-center space-y-8 mx-auto sm:shadow-[5px_5px_rgba(0,98,90,0.4),10px_10px_rgba(0,98,90,0.3),15px_15px_rgba(0,98,90,0.2),20px_20px_rgba(0,98,90,0.1),25px_25px_rgba(0,98,90,0.05)]">
         {/* Logo */}
         <Image
           src="/logoIcon.png"
