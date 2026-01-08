@@ -1,5 +1,6 @@
 "use server";
 
+
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { signupSchema } from "@/lib/schemas";
@@ -29,8 +30,6 @@ export async function createUserWithReferral(
   const MAX_DEPTH = 10;
 
   try {
-    // --- STEP 1: Perform Reads OUTSIDE the transaction (Optimizes speed) ---
-    
     // Check for existing user
     const existingUser = await prisma.user.findFirst({
       where: {
@@ -57,16 +56,12 @@ export async function createUserWithReferral(
       referrerId = process.env.DEFAULT_REFERRER_ID;
     }
 
-    // --- STEP 2: Start Transaction with Increased Timeout ---
     return await prisma.$transaction(async (tx) => {
-      // Create User (Better Auth)
-      // Note: If auth.api doesn't support passing 'tx', this runs independently.
-      // If it fails, the transaction aborts automatically.
       const user = await auth.api.createUser({
         body: {
           name,
           email,
-          password, // Better Auth hashes this automatically
+          password,
           role: "user",
           data: {
             referredById: referrerId,
@@ -92,7 +87,6 @@ export async function createUserWithReferral(
 
       // Create Closure - Inherit Ancestors
       if (referrerId) {
-        // We can use 'tx' here safely
         const ancestors = await tx.userClosure.findMany({
           where: { descendantId: referrerId },
         });
@@ -116,10 +110,9 @@ export async function createUserWithReferral(
 
       return { success: true, data: user };
     }, 
-    // --- CONFIG: Increase Timeout ---
     {
-      maxWait: 5000, // Time to wait to start the transaction
-      timeout: 20000 // Time allowed for the transaction to run (increased to 20s)
+      maxWait: 5000, 
+      timeout: 20000
     });
 
   } catch (error: any) {

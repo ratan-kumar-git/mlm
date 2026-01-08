@@ -1,29 +1,90 @@
 "use client";
+
 import InputCompo from "@/components/InputCompo";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
+import { authClient } from "@/lib/auth-client";
 import { Eye, EyeOff, LockIcon, Mail } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React, { FormEvent, useState } from "react";
+import { toast } from "sonner";
+import { z } from "zod";
+
+// 1. Define Zod Schema
+const loginSchema = z.object({
+  email: z.string().email("Please enter a valid email address"),
+  password: z.string().min(1, "Password is required"),
+});
 
 const Loginpage = () => {
-  const [formData, setFormData] = useState({
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<{ email: string; password: string }>({
     email: "",
     password: "",
   });
   const [isPasswordShow, setIsPasswordShow] = useState(false);
-  const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
+
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const handleFormSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("FormData", formData);
-    
+    setError({ email: "", password: "" }); // Reset errors
+
+    // 2. Validate with Zod
+    const result = loginSchema.safeParse(formData);
+
+    if (!result.success) {
+      const fieldErrors = result.error.flatten().fieldErrors;
+      setError({
+        email: fieldErrors.email?.[0] || "",
+        password: fieldErrors.password?.[0] || "",
+      });
+      return;
+    }
+
+    await authClient.signIn.email(
+      {
+        email: formData.email,
+        password: formData.password,
+      },
+      {
+        onRequest: () => {
+          setLoading(true);
+        },
+        onSuccess: async () => {
+          // 3. Fetch Session to determine Role
+          const { data: session } = await authClient.getSession();
+          
+          setLoading(false);
+          toast.success("Welcome back!");
+
+          // 4. Role-based Redirection
+          if (session?.user?.role === "admin") {
+            router.push("/admin/dashboard");
+          } else {
+            router.push("/user/dashboard");
+          }
+        },
+        onError: (ctx) => {
+          setLoading(false);
+          toast.error(ctx.error.message || "Invalid email or password");
+        },
+      }
+    );
   };
 
   return (
-    <div className="w-full bg-black h-screen relative overflow-hidden flex items-center justify-center">
+    <div className="w-full bg-black min-h-screen relative overflow-hidden flex items-center justify-center">
       <div className="absolute inset-0 z-0 pointer-events-none bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.08)_0%,rgba(255,140,250,0.08)_20%,rgba(0,0,0,0)_60%)]"></div>
+
       <div className="max-w-[95vw] sm:max-w-md w-full bg-card p-4 rounded-md flex items-center flex-col justify-center space-y-8 mx-auto sm:shadow-[5px_5px_rgba(0,98,90,0.4),10px_10px_rgba(0,98,90,0.3),15px_15px_rgba(0,98,90,0.2),20px_20px_rgba(0,98,90,0.1),25px_25px_rgba(0,98,90,0.05)]">
         {/* Logo */}
         <Image
@@ -34,7 +95,7 @@ const Loginpage = () => {
           className="border rounded-full p-2"
         />
 
-        {/* header text */}
+        {/* Header Text */}
         <div className="flex flex-col text-center space-y-2">
           <h1 className="text-2xl leading-tight font-bold">Welcome Back</h1>
           <p className="text-foreground/60 text-base">
@@ -42,14 +103,24 @@ const Loginpage = () => {
           </p>
         </div>
 
-        {/* google signin button */}
-        <Button variant={"outline"} className="w-full">
+        {/* Google Signin Button */}
+        <Button
+          variant={"outline"}
+          className="w-full"
+          disabled={loading}
+          onClick={async () => {
+            await authClient.signIn.social({
+              provider: "google",
+              callbackURL: "/user/dashboard",
+            });
+          }}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
             height="24"
             viewBox="0 0 128 128"
-            className="size-4"
+            className="size-4 mr-2"
           >
             <path
               fill="#fff"
@@ -75,29 +146,40 @@ const Loginpage = () => {
           Continue with Google
         </Button>
 
-        {/* separator */}
+        {/* Separator */}
         <div className="flex w-full overflow-hidden justify-center items-center gap-2 uppercase text-nowrap text-xs text-foreground/60">
           <Separator />
           Or continue with
           <Separator />
         </div>
 
-        {/* login form */}
+        {/* Login Form */}
         <form className="w-full space-y-8" onSubmit={handleFormSubmit}>
           <div className="w-full space-y-4">
-            {/* email input */}
-            <InputCompo
-              label="Email address"
-              labelFor="email"
-              placeholder="Enter your email"
-              icon={Mail}
-              type="email"
-              value={formData.email}
-              onChange={(e) =>
-                setFormData((prev) => ({ ...prev, email: e.target.value }))
-              }
-            />
+            {/* Email Input */}
+            <div className="space-y-1">
+              <InputCompo
+                label="Email address"
+                labelFor="email"
+                placeholder="Enter your email"
+                icon={Mail}
+                type="email"
+                value={formData.email}
+                disabled={loading}
+                onChange={(e) => {
+                  setFormData((prev) => ({ ...prev, email: e.target.value }));
+                  // Optional: Clear error on change for better UX
+                  if (error.email) setError((prev) => ({ ...prev, email: "" }));
+                }}
+              />
+              {error.email && (
+                <p className="text-xs text-destructive animate-pulse ml-1">
+                  {error.email}
+                </p>
+              )}
+            </div>
 
+            {/* Password Input */}
             <div className="space-y-1">
               <Label
                 htmlFor="password"
@@ -116,18 +198,22 @@ const Loginpage = () => {
                   placeholder="Enter your password"
                   autoComplete="current-password"
                   className="pl-9 pr-10"
-                  onChange={(e) =>
+                  disabled={loading}
+                  onChange={(e) => {
                     setFormData((prev) => ({
                       ...prev,
                       password: e.target.value,
-                    }))
-                  }
+                    }));
+                    if (error.password)
+                      setError((prev) => ({ ...prev, password: "" }));
+                  }}
                 />
 
                 <Button
                   type="button"
                   variant="ghost"
                   size="icon"
+                  disabled={loading}
                   onClick={() => setIsPasswordShow((prev) => !prev)}
                   className="absolute right-2 top-1/2 h-8 w-8 -translate-y-1/2 cursor-pointer"
                 >
@@ -138,6 +224,11 @@ const Loginpage = () => {
                   )}
                 </Button>
               </div>
+              {error.password && (
+                <p className="text-xs text-destructive animate-pulse ml-1">
+                  {error.password}
+                </p>
+              )}
             </div>
           </div>
 
@@ -145,12 +236,13 @@ const Loginpage = () => {
             type="submit"
             variant={"outline"}
             className="w-full cursor-pointer"
+            disabled={loading}
           >
-            Sign in
+            {loading ? "Signing in..." : "Sign in"}
           </Button>
         </form>
 
-        {/* card nav */}
+        {/* Card Nav */}
         <p className="text-sm text-muted-foreground">
           Don’t have an account?{" "}
           <Link
