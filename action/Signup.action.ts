@@ -54,6 +54,8 @@ export async function createUserWithReferral(
       referrerId = referrer.id;
     } else if (process.env.DEFAULT_REFERRER_ID) {
       referrerId = process.env.DEFAULT_REFERRER_ID;
+    } else {
+      return { success: false, error: "INVALID_REFERRAL_CODE" };
     }
 
     return await prisma.$transaction(async (tx) => {
