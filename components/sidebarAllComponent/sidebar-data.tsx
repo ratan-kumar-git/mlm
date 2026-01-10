@@ -186,45 +186,45 @@ export const userSidebarSections: SidebarSection[] = [
       { 
         title: "Plans", 
         icon: Crown, 
-        url: "/dashboard/plans" 
+        url: "/user/plans" 
       },
       { 
         title: "Plan History", 
         icon: History, 
-        url: "/dashboard/plan-history" 
+        url: "/user/plan-history" 
       },
       { 
         title: "Wallet", 
         icon: Wallet, 
-        url: "/dashboard/wallet" 
+        url: "/user/wallet" 
       },
       { 
         title: "Incomes", 
         icon: TrendingUp, 
-        url: "/dashboard/incomes",
+        url: "/user/incomes",
         items: [
-          { title: "ROI Income", url: "/dashboard/incomes/roi" },
-          { title: "Referral Income", url: "/dashboard/incomes/referral" },
+          { title: "ROI Income", url: "/user/incomes/roi" },
+          { title: "Referral Income", url: "/user/incomes/referral" },
         ],
       },
       {
         title: "My Network",
         icon: Network,
-        url: "/dashboard/network",
+        url: "/user/network",
         items: [
-          { title: "Genealogy", url: "/dashboard/network/genealogy" },
-          { title: "My Team", url: "/dashboard/network/team" },
+          { title: "Genealogy", url: "/user/network/genealogy" },
+          { title: "My Team", url: "/user/network/team" },
         ],
       },
       { 
         title: "Referral Link", 
         icon: Link, 
-        url: "/dashboard/referral" 
+        url: "/user/referral" 
       },
       { 
         title: "Help Center", 
         icon: HelpCircle, 
-        url: "/dashboard/help" 
+        url: "/user/help" 
       },
     ],
   },
