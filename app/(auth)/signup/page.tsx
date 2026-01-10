@@ -53,7 +53,6 @@ const SignupForm = () => {
   const router = useRouter();
   const [isPasswordShow, setIsPasswordShow] = useState(false);
 
-  // Initialize React Hook Form
   const {
     register,
     handleSubmit,
@@ -71,7 +70,6 @@ const SignupForm = () => {
     },
   });
 
-  // Effect to set referral code from URL safely
   useEffect(() => {
     const refCode =
       searchParams.get("referralCode") || searchParams.get("referralId");
@@ -263,8 +261,7 @@ const SignupPage = () => {
             Join us and start your journey today.
           </p>
         </div>
-
-        {/* Form wrapped in Suspense for useSearchParams */}
+        
         <Suspense fallback={<div className="text-white">Loading form...</div>}>
           <SignupForm />
         </Suspense>

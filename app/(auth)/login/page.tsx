@@ -14,7 +14,6 @@ import React, { FormEvent, useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
 
-// 1. Define Zod Schema
 const loginSchema = z.object({
   email: z.email("Please enter a valid email address"),
   password: z.string().min(1, "Password is required"),
@@ -36,9 +35,8 @@ const Loginpage = () => {
 
   const handleFormSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setError({ email: "", password: "" }); // Reset errors
+    setError({ email: "", password: "" });
 
-    // 2. Validate with Zod
     const result = loginSchema.safeParse(formData);
 
     if (!result.success) {
@@ -60,13 +58,11 @@ const Loginpage = () => {
           setLoading(true);
         },
         onSuccess: async () => {
-          // 3. Fetch Session to determine Role
           const { data: session } = await authClient.getSession();
           
           setLoading(false);
           toast.success("Welcome back!");
 
-          // 4. Role-based Redirection
           if (session?.user?.role === "admin") {
             router.push("/admin/dashboard");
           } else {
