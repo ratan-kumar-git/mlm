@@ -1,4 +1,5 @@
 "use server";
+import { Prisma } from "@/generated/prisma/client";
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { signupSchema } from "@/lib/schemas";
@@ -20,11 +21,14 @@ export async function createUserWithReferral(
   if (!validatedFields.success) {
     return {
       success: false,
-      error: validatedFields.error.flatten().fieldErrors.name?.[0] || "Invalid input",
+      error:
+        validatedFields.error.flatten().fieldErrors.name?.[0] ||
+        "Invalid input",
     };
   }
 
-  const { name, username, email, password, referralCode } = validatedFields.data;
+  const { name, username, email, password, referralCode } =
+    validatedFields.data;
   const MAX_DEPTH = 10;
 
   try {
@@ -37,8 +41,10 @@ export async function createUserWithReferral(
     });
 
     if (existingUser) {
-      if (existingUser.email === email) return { success: false, error: "EMAIL_EXISTS" };
-      if (existingUser.username === username) return { success: false, error: "USERNAME_EXISTS" };
+      if (existingUser.email === email)
+        return { success: false, error: "EMAIL_EXISTS" };
+      if (existingUser.username === username)
+        return { success: false, error: "USERNAME_EXISTS" };
     }
 
     // Find referrer
@@ -56,77 +62,115 @@ export async function createUserWithReferral(
       return { success: false, error: "INVALID_REFERRAL_CODE" };
     }
 
-    return await prisma.$transaction(async (tx) => {
-      const user = await auth.api.createUser({
-        body: {
-          name,
-          email,
-          password,
-          role: "user",
-          data: {
-            referredById: referrerId,
-            username: username || "",
+    return await prisma.$transaction(
+      async (tx) => {
+        const user = await auth.api.createUser({
+          body: {
+            name,
+            email,
+            password,
+            role: "user",
+            data: {
+              referredById: referrerId,
+              username: username || "",
+            },
           },
-        },
-      });
-
-      if (!user?.user?.id) {
-        throw new Error("Failed to create user record");
-      }
-
-      const userId = user.user.id;
-
-      // Create Closure - Self Link
-      await tx.userClosure.create({
-        data: {
-          ancestorId: userId,
-          descendantId: userId,
-          depth: 0,
-        },
-      });
-
-      // Create Closure - Inherit Ancestors
-      if (referrerId) {
-        const ancestors = await tx.userClosure.findMany({
-          where: { descendantId: referrerId },
         });
 
-        if (ancestors.length > 0) {
-          const newRelations = ancestors
-            .filter((a) => a.depth + 1 < MAX_DEPTH)
-            .map((a) => ({
-              ancestorId: a.ancestorId,
-              descendantId: userId,
-              depth: a.depth + 1,
-            }));
+        if (!user?.user?.id) {
+          throw new Error("Failed to create user record");
+        }
 
-          if (newRelations.length > 0) {
-            await tx.userClosure.createMany({
-              data: newRelations,
-            });
+        const userId = user.user.id;
+
+        // Create Closure - Self Link
+        await tx.userClosure.create({
+          data: {
+            ancestorId: userId,
+            descendantId: userId,
+            depth: 0,
+          },
+        });
+
+        // Create Closure - Inherit Ancestors
+        if (referrerId) {
+          const ancestors = await tx.userClosure.findMany({
+            where: { descendantId: referrerId },
+          });
+
+          if (ancestors.length > 0) {
+            const newRelations = ancestors
+              .filter((a) => a.depth + 1 < MAX_DEPTH)
+              .map((a) => ({
+                ancestorId: a.ancestorId,
+                descendantId: userId,
+                depth: a.depth + 1,
+              }));
+
+            if (newRelations.length > 0) {
+              await tx.userClosure.createMany({
+                data: newRelations,
+              });
+            }
           }
         }
+
+        return { success: true, data: user };
+      },
+      {
+        maxWait: 5000,
+        timeout: 20000,
+      }
+    );
+  } catch (error: any) {
+    console.error("Action Error Log:", error);
+
+    if (error instanceof z.ZodError) {
+    const firstError = z.treeifyError(error); 
+    return {
+      success: false,
+      error: firstError ? firstError.errors[0] : "Invalid form data",
+    };
+  }
+
+    // 2. Handle Prisma Database Errors
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      // P2002: Unique constraint (User already exists)
+      if (error.code === "P2002") {
+        const target = (error.meta?.target as string[]) || [];
+        if (target.includes("email"))
+          return { success: false, error: "This email is already registered." };
+        if (target.includes("username"))
+          return { success: false, error: "This username is taken." };
+        return {
+          success: false,
+          error: "A user with these details already exists.",
+        };
       }
 
-      return { success: true, data: user };
-    }, 
-    {
-      maxWait: 5000, 
-      timeout: 20000
-    });
+      if (error.code === "P2003") {
+        return {
+          success: false,
+          error: "The Referral Code provided is invalid or does not exist.",
+        };
+      }
 
-  } catch (error: any) {
-    console.error("Signup Error:", error);
+      if (error.code === "P2025") {
+        return { success: false, error: "Requested record was not found." };
+      }
+    }
 
-    // Map errors to friendly messages
-    if (error === "EMAIL_EXISTS" || error.message === "EMAIL_EXISTS") {
-      return { success: false, error: "This email address is already registered." };
-    }
-    if (error === "USERNAME_EXISTS" || error.message === "USERNAME_EXISTS") {
-      return { success: false, error: "This username is already taken." };
-    }
-    if (error === "INVALID_REFERRAL_CODE" || error.message === "INVALID_REFERRAL_CODE") {
-      return { success: false, error: "The Referral Code provided is invalid." };
+    // 3. Handle Standard Javascript Errors
+    if (error instanceof Error) {
+      // Catch custom thrown errors like "EMAIL_EXISTS"
+      if (error.message === "EMAIL_EXISTS")
+        return { success: false, error: "Email already exists." };
+      if (error.message === "USERNAME_EXISTS")
+        return { success: false, error: "Username already taken." };
+      if (error.message === "INVALID_REFERRAL_CODE")
+        return { success: false, error: "Invalid referral code." };
+
+      return { success: false, error: error.message };
     }
 
     return {
