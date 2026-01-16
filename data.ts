@@ -108,3 +108,99 @@ export const depositData = [
     icon: TrendingUp,
   },
 ];
+
+export const PLAN_SETTING = [
+  {
+    id: 0,
+    label: "Maximum Active Plan",
+    labelFor: "Maximum Active Plan",
+    value: "100"
+  },
+  {
+    id: 1,
+    label: "Referral Income",
+    labelFor: "referral_Income",
+    value: "10",
+    subValue: "Level"
+  },
+  {
+    id: 2,
+    label: "1st ROI Income",
+    labelFor: "roi_Income",
+    value: "1",
+    subValue: "Hours"
+  }
+]
+
+export const REFERRAl_INCOME_SETTING = [
+  {
+    id: 0,
+    label: "Level 1",
+    labelFor: "level1",
+    value: "50",
+    subValue: "%"
+  },
+  {
+    id: 1,
+    label: "Level 2",
+    labelFor: "level2",
+    value: "40",
+    subValue: "%"
+  },
+  {
+    id: 2,
+    label: "Level 3",
+    labelFor: "level3",
+    value: "30",
+    subValue: "%"
+  },
+  {
+    id: 3,
+    label: "Level 4",
+    labelFor: "level4",
+    value: "20",
+    subValue: "%"
+  },
+  {
+    id: 4,
+    label: "Level 5",
+    labelFor: "level5",
+    value: "10",
+    subValue: "%"
+  },
+  {
+    id: 5,
+    label: "Level 6",
+    labelFor: "level6",
+    value: "5",
+    subValue: "%"
+  },
+  {
+    id: 6,
+    label: "Level 7",
+    labelFor: "level7",
+    value: "4",
+    subValue: "%"
+  },
+  {
+    id: 7,
+    label: "Level 8",
+    labelFor: "level8",
+    value: "3",
+    subValue: "%"
+  },
+  {
+    id: 8,
+    label: "Level 9",
+    labelFor: "level9",
+    value: "2",
+    subValue: "%"
+  },
+  {
+    id: 9,
+    label: "Level 10",
+    labelFor: "level10",
+    value: "1",
+    subValue: "%"
+  },
+]
