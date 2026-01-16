@@ -1,10 +1,14 @@
+"use client";
 import DataTable from "@/components/DataTable";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
-import React from "react";
+import React, { useState } from "react";
 import { columns, Payment } from "./columns";
+import PlanSettingCard from "@/components/PlanSettingCard";
+import Input2Comp from "@/components/ui/Input2Comp";
+import { PLAN_SETTING, REFERRAl_INCOME_SETTING } from "@/data";
 
-async function getData(): Promise<Payment[]> {
+function getData(): Payment[] {
   return [
     {
       id: 1,
@@ -75,8 +79,15 @@ async function getData(): Promise<Payment[]> {
   ];
 }
 
-export default async function Page() {
-  const data = await getData();
+export default function Page() {
+  const [isEditEnablePlan, setIsEditEnablePlan] = useState(false);
+  const [isEditEnableReferral, setIsEditEnableReferral] = useState(false);
+  const [planSettingData, setPlanSettingData] = useState({
+    maxActivePlan: "100",
+    referralIncome: "10",
+    firstROI: "1",
+  });
+  const data = getData();
   return (
     <>
       <div className="w-full min-h-screen p-4 mx-auto space-y-6">
@@ -87,6 +98,48 @@ export default async function Page() {
           </Button>
         </div>
         <DataTable columns={columns} data={data} />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <PlanSettingCard
+            heading="Plan Setting"
+            isEditEnable={isEditEnablePlan}
+            onClick={() => setIsEditEnablePlan(!isEditEnablePlan)}
+          >
+            {PLAN_SETTING.map((item) => {
+              return (
+                <Input2Comp
+                  key={item.id}
+                  lable={item.label}
+                  lablefor={item.labelFor}
+                  type="text"
+                  disabled={isEditEnablePlan}
+                  value={item.value}
+                  subValue={item.subValue}
+                  onChange={(e) => (item.value = e.target.value)}
+                />
+              );
+            })}
+          </PlanSettingCard>
+          <PlanSettingCard
+            heading="Referral Income Settings"
+            isEditEnable={isEditEnableReferral}
+            onClick={() => setIsEditEnableReferral(!isEditEnableReferral)}
+          >
+            {REFERRAl_INCOME_SETTING.map((item) => {
+              return (
+                <Input2Comp
+                  type="text"
+                  value={item.value}
+                  key={item.id}
+                  lable={item.label}
+                  disabled={isEditEnableReferral}
+                  lablefor={item.labelFor}
+                  onChange={(e) => (item.value = e.target.value)}
+                  subValue={item.subValue}
+                />
+              );
+            })}
+          </PlanSettingCard>
+        </div>
       </div>
     </>
   );
