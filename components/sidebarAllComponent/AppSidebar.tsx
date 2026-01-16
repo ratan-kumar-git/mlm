@@ -64,11 +64,11 @@ const AppSidebar = ({ userRole }: AppSidebarProps) => {
 
         <button
           onClick={toggleSidebar}
-          className="absolute -right-3 top-1/2 -translate-y-1/2 bg-primary text-primary-foreground rounded-full p-1 border shadow-md hover:scale-110 transition-transform z-20"
+          className="absolute hidden md:block -right-3 top-1/2 -translate-y-1/2 bg-background text-primary rounded-full p-1 border shadow-md hover:scale-110 transition-transform z-20"
         >
           <ChevronLeft
             className={cn(
-              "h-3 w-3 transition-transform duration-200",
+              "h-4 w-4 transition-transform duration-200",
               state === "collapsed" && "rotate-180"
             )}
           />

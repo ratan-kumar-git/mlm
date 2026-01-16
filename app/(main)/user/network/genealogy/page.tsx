@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState, useCallback } from "react";
 import Tree from "react-d3-tree";
-import { User, ShieldCheck, Users, Plus, Minus } from "lucide-react";
+import { User, ShieldCheck, Users, Plus, Minus, Loader } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
 import Image from "next/image";
 
@@ -17,7 +17,6 @@ interface OrgNode {
     status: string;
   };
   children?: OrgNode[];
-  // D3 Tree injects this state automatically
   __rd3t?: {
     collapsed?: boolean;
     depth?: number;
@@ -29,7 +28,7 @@ const useCenteredTree = () => {
   const [translate, setTranslate] = useState({ x: 0, y: 0 });
   const containerRef = useCallback((containerElem: HTMLDivElement | null) => {
     if (containerElem !== null) {
-      const { width, height } = containerElem.getBoundingClientRect();
+      const { width } = containerElem.getBoundingClientRect();
       setTranslate({ x: width / 2, y: 100 });
     }
   }, []);
@@ -54,8 +53,8 @@ export default function GenealogyTree() {
 
   if (!data || isPending) {
     return (
-      <div className="w-full h-[600px] flex items-center justify-center border border-slate-800 rounded-xl bg-[#020617] text-slate-400 animate-pulse">
-        Loading Network...
+      <div className="w-full h-full flex items-center justify-center border gap-2">
+        <Loader className="animate-spin" /> Loading Network 
       </div>
     );
   }
@@ -63,7 +62,7 @@ export default function GenealogyTree() {
   return (
     <div
       ref={containerRef}
-      className="w-full h-[85vh] max-h-screen overflow-hidden relative inset-0 z-0 border border-slate-800 rounded-xl shadow-2xl"
+      className="w-full h-full max-h-screen overflow-hidden relative inset-0 z-0 border border-slate-800 shadow-2xl"
       style={{
         backgroundColor: "#000000",
         backgroundImage: `

@@ -23,8 +23,6 @@ export async function GET(
     },
     orderBy: { depth: "asc" },
   });
-  console.log(rawData);
-  
 
   const map = new Map();
   let rootNode = null;
