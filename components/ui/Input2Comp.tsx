@@ -5,10 +5,10 @@ interface Input2Compprop {
   lable: string;
   lablefor: string;
   type: "text" | "email";
-  value: number;
+  value: string | number;
   subValue?: string | number;
   onChange: ChangeEventHandler<HTMLInputElement>;
-  disabled: boolean;
+  disabled?: boolean;
 }
 
 export default function Input2Comp({

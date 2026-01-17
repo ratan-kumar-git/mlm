@@ -23,13 +23,15 @@ interface ClientPlanProp {
 
 // colums defination for header of table
 const columns: ColumnDef<PlanProp>[] = [
-  { accessorKey: "id", header: "#", maxSize: 5 },
+  { accessorKey: "", header: "#", maxSize: 5 },
   { accessorKey: "name", header: "Name" },
-  { accessorKey: "priceCurrency", header: "Currency" },
-  { accessorKey: "profitPercent", header: "Daily ROI" },
-  { accessorKey: "maxReturnPercent", header: "Max Return" },
-  { accessorKey: "status", header: "Status" },
-  { accessorKey: "durationDays", header: "Duration" },
+  { accessorKey: "price", header: "Price" },
+  { accessorKey: "roi", header: "Daily ROI" },
+  { accessorKey: "maximumReturn", header: "Maximum Return" },
+  { accessorKey: "validity", header: "Validity" },
+  { accessorKey: "active", header: "Status" },
+  { accessorKey: "createdAt", header: "Create At" },
+  { accessorKey: "id", header: "Action" },
 ];
 
 const ClientPlan = ({
@@ -160,6 +162,7 @@ const ClientPlan = ({
               type="text"
               disabled={isEditEnablePlanSetting}
               value={planSettingData.referralDepthLevel}
+              subValue={"Level"}
               onChange={(e) =>
                 setPlanSettingData((prev) => ({
                   ...prev,
@@ -174,6 +177,7 @@ const ClientPlan = ({
               type="text"
               disabled={isEditEnablePlanSetting}
               value={planSettingData.firstRoiIncome}
+              subValue={"Hours"}
               onChange={(e) =>
                 setPlanSettingData((prev) => ({
                   ...prev,
