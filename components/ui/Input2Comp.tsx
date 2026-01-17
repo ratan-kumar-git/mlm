@@ -5,7 +5,7 @@ interface Input2Compprop {
   lable: string;
   lablefor: string;
   type: "text" | "email";
-  value: string | number;
+  value: number;
   subValue?: string | number;
   onChange: ChangeEventHandler<HTMLInputElement>;
   disabled: boolean;

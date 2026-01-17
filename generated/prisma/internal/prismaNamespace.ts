@@ -388,7 +388,10 @@ export const ModelName = {
   UserClosure: 'UserClosure',
   Session: 'Session',
   Account: 'Account',
-  Verification: 'Verification'
+  Verification: 'Verification',
+  Plan: 'Plan',
+  PlanSetting: 'PlanSetting',
+  ReferralSetting: 'ReferralSetting'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -404,7 +407,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "userClosure" | "session" | "account" | "verification"
+    modelProps: "user" | "userClosure" | "session" | "account" | "verification" | "plan" | "planSetting" | "referralSetting"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -778,6 +781,228 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Plan: {
+      payload: Prisma.$PlanPayload<ExtArgs>
+      fields: Prisma.PlanFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PlanFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PlanFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanPayload>
+        }
+        findFirst: {
+          args: Prisma.PlanFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PlanFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanPayload>
+        }
+        findMany: {
+          args: Prisma.PlanFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanPayload>[]
+        }
+        create: {
+          args: Prisma.PlanCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanPayload>
+        }
+        createMany: {
+          args: Prisma.PlanCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PlanCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanPayload>[]
+        }
+        delete: {
+          args: Prisma.PlanDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanPayload>
+        }
+        update: {
+          args: Prisma.PlanUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanPayload>
+        }
+        deleteMany: {
+          args: Prisma.PlanDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PlanUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PlanUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanPayload>[]
+        }
+        upsert: {
+          args: Prisma.PlanUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanPayload>
+        }
+        aggregate: {
+          args: Prisma.PlanAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePlan>
+        }
+        groupBy: {
+          args: Prisma.PlanGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PlanGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PlanCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PlanCountAggregateOutputType> | number
+        }
+      }
+    }
+    PlanSetting: {
+      payload: Prisma.$PlanSettingPayload<ExtArgs>
+      fields: Prisma.PlanSettingFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PlanSettingFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanSettingPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PlanSettingFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanSettingPayload>
+        }
+        findFirst: {
+          args: Prisma.PlanSettingFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanSettingPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PlanSettingFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanSettingPayload>
+        }
+        findMany: {
+          args: Prisma.PlanSettingFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanSettingPayload>[]
+        }
+        create: {
+          args: Prisma.PlanSettingCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanSettingPayload>
+        }
+        createMany: {
+          args: Prisma.PlanSettingCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PlanSettingCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanSettingPayload>[]
+        }
+        delete: {
+          args: Prisma.PlanSettingDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanSettingPayload>
+        }
+        update: {
+          args: Prisma.PlanSettingUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanSettingPayload>
+        }
+        deleteMany: {
+          args: Prisma.PlanSettingDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PlanSettingUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PlanSettingUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanSettingPayload>[]
+        }
+        upsert: {
+          args: Prisma.PlanSettingUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanSettingPayload>
+        }
+        aggregate: {
+          args: Prisma.PlanSettingAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePlanSetting>
+        }
+        groupBy: {
+          args: Prisma.PlanSettingGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PlanSettingGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PlanSettingCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PlanSettingCountAggregateOutputType> | number
+        }
+      }
+    }
+    ReferralSetting: {
+      payload: Prisma.$ReferralSettingPayload<ExtArgs>
+      fields: Prisma.ReferralSettingFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ReferralSettingFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReferralSettingPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ReferralSettingFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReferralSettingPayload>
+        }
+        findFirst: {
+          args: Prisma.ReferralSettingFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReferralSettingPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ReferralSettingFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReferralSettingPayload>
+        }
+        findMany: {
+          args: Prisma.ReferralSettingFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReferralSettingPayload>[]
+        }
+        create: {
+          args: Prisma.ReferralSettingCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReferralSettingPayload>
+        }
+        createMany: {
+          args: Prisma.ReferralSettingCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ReferralSettingCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReferralSettingPayload>[]
+        }
+        delete: {
+          args: Prisma.ReferralSettingDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReferralSettingPayload>
+        }
+        update: {
+          args: Prisma.ReferralSettingUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReferralSettingPayload>
+        }
+        deleteMany: {
+          args: Prisma.ReferralSettingDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ReferralSettingUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ReferralSettingUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReferralSettingPayload>[]
+        }
+        upsert: {
+          args: Prisma.ReferralSettingUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReferralSettingPayload>
+        }
+        aggregate: {
+          args: Prisma.ReferralSettingAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateReferralSetting>
+        }
+        groupBy: {
+          args: Prisma.ReferralSettingGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ReferralSettingGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ReferralSettingCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ReferralSettingCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -891,6 +1116,46 @@ export const VerificationScalarFieldEnum = {
 } as const
 
 export type VerificationScalarFieldEnum = (typeof VerificationScalarFieldEnum)[keyof typeof VerificationScalarFieldEnum]
+
+
+export const PlanScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  price: 'price',
+  roi: 'roi',
+  maximumReturn: 'maximumReturn',
+  validity: 'validity',
+  active: 'active',
+  idxOrder: 'idxOrder',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PlanScalarFieldEnum = (typeof PlanScalarFieldEnum)[keyof typeof PlanScalarFieldEnum]
+
+
+export const PlanSettingScalarFieldEnum = {
+  id: 'id',
+  maxActivePlanLimit: 'maxActivePlanLimit',
+  referralDepthLevel: 'referralDepthLevel',
+  firstRoiIncome: 'firstRoiIncome',
+  roiIncomeDay: 'roiIncomeDay',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PlanSettingScalarFieldEnum = (typeof PlanSettingScalarFieldEnum)[keyof typeof PlanSettingScalarFieldEnum]
+
+
+export const ReferralSettingScalarFieldEnum = {
+  id: 'id',
+  level: 'level',
+  percentage: 'percentage',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ReferralSettingScalarFieldEnum = (typeof ReferralSettingScalarFieldEnum)[keyof typeof ReferralSettingScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1085,6 +1350,9 @@ export type GlobalOmitConfig = {
   session?: Prisma.SessionOmit
   account?: Prisma.AccountOmit
   verification?: Prisma.VerificationOmit
+  plan?: Prisma.PlanOmit
+  planSetting?: Prisma.PlanSettingOmit
+  referralSetting?: Prisma.ReferralSettingOmit
 }
 
 /* Types for Logging */

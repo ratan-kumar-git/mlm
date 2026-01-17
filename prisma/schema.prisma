@@ -101,3 +101,34 @@ model Verification {
   @@index([identifier])
   @@map("verification")
 }
+
+model Plan {
+  id            Int   @id @default(autoincrement())
+  name          String
+  price         Int
+  roi           Float
+  maximumReturn Float
+  validity      Int
+  active        Boolean
+  idxOrder      Int
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model PlanSetting {
+  id                 Int      @id @default(1)
+  maxActivePlanLimit Int      @default(100)
+  referralDepthLevel Int      @default(10)
+  firstRoiIncome     Int      @default(1)
+  roiIncomeDay       String   @default("Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday")
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
+
+model ReferralSetting {
+  id         Int      @id @default(autoincrement())
+  level      Int      @unique
+  percentage Float
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}

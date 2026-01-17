@@ -42,3 +42,18 @@ export type Account = Prisma.AccountModel
  * 
  */
 export type Verification = Prisma.VerificationModel
+/**
+ * Model Plan
+ * 
+ */
+export type Plan = Prisma.PlanModel
+/**
+ * Model PlanSetting
+ * 
+ */
+export type PlanSetting = Prisma.PlanSettingModel
+/**
+ * Model ReferralSetting
+ * 
+ */
+export type ReferralSetting = Prisma.ReferralSettingModel

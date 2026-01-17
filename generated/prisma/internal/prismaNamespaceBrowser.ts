@@ -55,7 +55,10 @@ export const ModelName = {
   UserClosure: 'UserClosure',
   Session: 'Session',
   Account: 'Account',
-  Verification: 'Verification'
+  Verification: 'Verification',
+  Plan: 'Plan',
+  PlanSetting: 'PlanSetting',
+  ReferralSetting: 'ReferralSetting'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -148,6 +151,46 @@ export const VerificationScalarFieldEnum = {
 } as const
 
 export type VerificationScalarFieldEnum = (typeof VerificationScalarFieldEnum)[keyof typeof VerificationScalarFieldEnum]
+
+
+export const PlanScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  price: 'price',
+  roi: 'roi',
+  maximumReturn: 'maximumReturn',
+  validity: 'validity',
+  active: 'active',
+  idxOrder: 'idxOrder',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PlanScalarFieldEnum = (typeof PlanScalarFieldEnum)[keyof typeof PlanScalarFieldEnum]
+
+
+export const PlanSettingScalarFieldEnum = {
+  id: 'id',
+  maxActivePlanLimit: 'maxActivePlanLimit',
+  referralDepthLevel: 'referralDepthLevel',
+  firstRoiIncome: 'firstRoiIncome',
+  roiIncomeDay: 'roiIncomeDay',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PlanSettingScalarFieldEnum = (typeof PlanSettingScalarFieldEnum)[keyof typeof PlanSettingScalarFieldEnum]
+
+
+export const ReferralSettingScalarFieldEnum = {
+  id: 'id',
+  level: 'level',
+  percentage: 'percentage',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ReferralSettingScalarFieldEnum = (typeof ReferralSettingScalarFieldEnum)[keyof typeof ReferralSettingScalarFieldEnum]
 
 
 export const SortOrder = {
